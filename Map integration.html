@@ -41,7 +41,7 @@
         function GetMap(results) {
       
         var map = new Microsoft.Maps.Map('#myMap', {
-            credentials: 'AoqBYL1V5SePRncjElvhxSR4bXrjLIvM284V5uOYIi5RP-sn_2CFnkUrMA2kDVur',
+            credentials: '<YOUR API KEY>',
             center: new Microsoft.Maps.Location(results[0].address1_latitude,results[0].address1_longitude),
             zoom:12
         });
@@ -56,5 +56,5 @@
        
     }}
   </script>
-  <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&amp;key=AoqBYL1V5SePRncjElvhxSR4bXrjLIvM284V5uOYIi5RP-sn_2CFnkUrMA2kDVur" async defer></script>
+  <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&amp;key=<YOUR API KEY>" async defer></script>
 {% endblock %}
