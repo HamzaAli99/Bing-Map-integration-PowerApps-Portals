@@ -1,0 +1,60 @@
+{% extends 'Layout 1 Column' %}
+{% block main %}
+  <div class="row sectionBlockLayout" style="display: flex; flex-wrap: wrap; text-align: left; min-height: 100px; padding: 8px; margin: 0px;">
+    <div class="container" style="display: flex; flex-wrap: wrap;">
+      <div id="myMap" style="position: relative; width: 600px; height: 400px;">
+      
+      </div>
+    </div>
+  </div>  
+  <script>
+  var results;
+  debugger;
+  (function(webapi, $){
+		function safeAjax(ajaxOptions) {
+			var deferredAjax = $.Deferred();
+		
+				$.ajax(ajaxOptions)
+					.done(function(data, textStatus, jqXHR) {
+						validateLoginSession(data, textStatus, jqXHR, deferredAjax.resolve);
+					}).fail(deferredAjax.reject); //AJAX
+			
+	
+			return deferredAjax.promise();	
+		}
+		webapi.safeAjax = safeAjax;
+	})(window.webapi = window.webapi || {}, jQuery) 
+    	webapi.safeAjax({
+				type: "GET",
+				url: "/_api/accounts?$select=address1_longitude,address1_latitude,address1_city&$filter=(address1_latitude ne null) and (address1_longitude ne null)",
+				contentType: "application/json",
+				success: function (res) {
+					//	console.log(res);
+           results = res.value;
+          console.log(results);
+          GetMap(results);
+            
+				}
+	});
+</script>
+<script>
+        function GetMap(results) {
+      
+        var map = new Microsoft.Maps.Map('#myMap', {
+            credentials: 'AoqBYL1V5SePRncjElvhxSR4bXrjLIvM284V5uOYIi5RP-sn_2CFnkUrMA2kDVur',
+            center: new Microsoft.Maps.Location(results[0].address1_latitude,results[0].address1_longitude),
+            zoom:12
+        });
+        
+         for(var i = 0; i<results.length; i++){
+       // var center = map.getCenter();
+       
+        var location = new Microsoft.Maps.Location(results[i].address1_latitude, results[i].address1_longitude);
+        var pin = new Microsoft.Maps.Pushpin(location, { title: results[i].address1_city, subTitle: 'City', text: i});
+        
+        map.entities.push(pin);
+       
+    }}
+  </script>
+  <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&amp;key=AoqBYL1V5SePRncjElvhxSR4bXrjLIvM284V5uOYIi5RP-sn_2CFnkUrMA2kDVur" async defer></script>
+{% endblock %}
